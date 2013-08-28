@@ -6,7 +6,7 @@ collection of userscripts
 kunstwacht:
 -----------
 
-javascript file: kunstwacht.user.js. download &amp; install ![kunstwacht.user.js](./kunstwacht.user.js "kunstwacht.user.js"). 
+download &amp; install ![kunstwacht.user.js](./kunstwacht.user.js "kunstwacht.user.js") (click raw button). 
 
 original website page (without userscript):
 
