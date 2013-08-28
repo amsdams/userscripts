@@ -1,11 +1,10 @@
-
 kunstwacht:
 ===========
 
 installation:
 -------------
 
-download &amp; install ![kunstwacht.user.js](./kunstwacht.user.js "kunstwacht.user.js") (click raw button). 
+download &amp; install [kunstwacht.user.js](./kunstwacht.user.js "kunstwacht.user.js") (click raw button). 
 
 description
 -------------
