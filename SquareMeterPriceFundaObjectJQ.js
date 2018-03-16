@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         SquareMeterPriceFundaelement
+// @name         SquareMeterPriceFundaObjectJQ
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  try to take over the world!
@@ -89,11 +89,12 @@ this.$ = this.jQuery = jQuery.noConflict(true);
         var nGebouwgebondenBuitenruimte= parseFloat(tGebouwgebondenBuitenruimte?tGebouwgebondenBuitenruimte.replace(/[^0-9]/g, ""):0);
         var nExterneBergruimte= parseFloat(tExterneBergruimte?tExterneBergruimte.replace(/[^0-9]/g, ""):0);
         var nInhoud = tInhoud.replace(/[^0-9]/g, "");
+        
         var nVierkanteMeterPrijs = nVraagprijs/nWoonoppervlakte;
         var nVierkanteMeterPrijs2 = nVraagprijs/(nWoonoppervlakte+nOverigeInpandigeRuimte+nGebouwgebondenBuitenruimte+nExterneBergruimte);
         var nKubiekeMeterPrijs = nVraagprijs/nInhoud;
+        
         var eExtraInfo = $("<ul>");
-
         eExtraInfo.append($("<li>").text('VierkanteMeterPrijs: '+nVierkanteMeterPrijs));
         eExtraInfo.append($("<li>").text('VierkanteMeterPrijs2: '+nVierkanteMeterPrijs2));
         eExtraInfo.append($("<li>").text('KubiekeMeterPrijs: '+nKubiekeMeterPrijs));
