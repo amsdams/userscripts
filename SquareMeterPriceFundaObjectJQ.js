@@ -11,25 +11,35 @@
 
 this.$ = this.jQuery = jQuery.noConflict(true);
 
+
 (function() {
     'use strict';
 
 
     var bDetail = $('main div.object-detail').length==1;
     var bOverview = $('main form').length==1;
+    var elements=[];
+    var tWoonoppervlakte='';
+    var tVraagprijs='';
+    var nVraagprijs=0;
+    var nWoonoppervlakte=0;
+    var nVierkanteMeterPrijs=0;
+    var tOverigeInpandigeRuimte='';
+    var tGebouwgebondenBuitenruimte='';
+    var tExterneBergruimte='';
 
     if (bOverview){
         // Your code here...
-        var elements = $(".search-result-content-inner");
+        elements = $(".search-result-content-inner");
         for (var i=0; i < elements.length; ++i){
-            var element = $(elements[i]);
+            element = $(elements[i]);
             var eVraagprijs = element.find('.search-result-price');
             var eWoonoppervlakte = element.find('[title=Woonoppervlakte]');
-            var tVraagprijs = eVraagprijs.text();
-            var tWoonoppervlakte = eWoonoppervlakte.text();
-            var nVraagprijs = tVraagprijs.replace(/[^0-9]/g, "");
-            var nWoonoppervlakte = tWoonoppervlakte.replace(/[^0-9]/g, "");
-            var nVierkanteMeterPrijs = nVraagprijs/nWoonoppervlakte;
+            tVraagprijs = eVraagprijs.text();
+            tWoonoppervlakte = eWoonoppervlakte.text();
+            nVraagprijs = tVraagprijs.replace(/[^0-9]/g, "");
+            nWoonoppervlakte = tWoonoppervlakte.replace(/[^0-9]/g, "");
+            nVierkanteMeterPrijs = nVraagprijs/nWoonoppervlakte;
             var eVierkanteMeterPrijs = createEVierkanteMeterPrijs(nVierkanteMeterPrijs);
             element.append(eVierkanteMeterPrijs);
 
@@ -37,9 +47,8 @@ this.$ = this.jQuery = jQuery.noConflict(true);
     }
 
     if (bDetail){
-        var elements = $(".object-kenmerken-list > *, .object-kenmerken-group-list > dl > *");
-        var tWoonoppervlakte, tOverigeInpandigeRuimte, tGebouwgebondenBuitenruimte, tExterneBergruimte;
-        var tVraagprijs;
+        elements = $(".object-kenmerken-list > *, .object-kenmerken-group-list > dl > *");
+
         var tInhoud;
         var tEigendomssituatie;
 
@@ -83,17 +92,17 @@ this.$ = this.jQuery = jQuery.noConflict(true);
         }
 
         //replace(/[^0-9.]/g, "");
-        var nVraagprijs = parseFloat(tVraagprijs.replace(/[^0-9]/g, ""));
-        var nWoonoppervlakte = parseFloat(tWoonoppervlakte.replace(/[^0-9]/g, ""));
+        nVraagprijs = parseFloat(tVraagprijs.replace(/[^0-9]/g, ""));
+        nWoonoppervlakte = parseFloat(tWoonoppervlakte.replace(/[^0-9]/g, ""));
         var nOverigeInpandigeRuimte = parseFloat(tOverigeInpandigeRuimte?tOverigeInpandigeRuimte.replace(/[^0-9]/g, ""):0);
         var nGebouwgebondenBuitenruimte= parseFloat(tGebouwgebondenBuitenruimte?tGebouwgebondenBuitenruimte.replace(/[^0-9]/g, ""):0);
         var nExterneBergruimte= parseFloat(tExterneBergruimte?tExterneBergruimte.replace(/[^0-9]/g, ""):0);
         var nInhoud = tInhoud.replace(/[^0-9]/g, "");
-        
-        var nVierkanteMeterPrijs = nVraagprijs/nWoonoppervlakte;
+
+        nVierkanteMeterPrijs = nVraagprijs/nWoonoppervlakte;
         var nVierkanteMeterPrijs2 = nVraagprijs/(nWoonoppervlakte+nOverigeInpandigeRuimte+nGebouwgebondenBuitenruimte+nExterneBergruimte);
         var nKubiekeMeterPrijs = nVraagprijs/nInhoud;
-        
+
         var eExtraInfo = $("<ul>");
         eExtraInfo.append($("<li>").text('VierkanteMeterPrijs: '+nVierkanteMeterPrijs));
         eExtraInfo.append($("<li>").text('VierkanteMeterPrijs2: '+nVierkanteMeterPrijs2));
@@ -106,6 +115,6 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 
 
     }
-    
+
 
 })();
