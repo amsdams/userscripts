@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         SquareMeterPriceFundaObjectJQ
+// @name         squaremeter
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  try to take over the world!
@@ -8,16 +8,12 @@
 // @grant        none
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // ==/UserScript==
-this.$ = this.jQuery = jQuery.noConflict(true);
 
-
-(function() {
+(function($) {
     'use strict';
 
     function doDetail(object) {
-
-
-        var elements = object.find(".object-kenmerken-list > *, .object-kenmerken-group-list > dl > *");
+        var elements = object.find('.object-kenmerken-list > *, .object-kenmerken-group-list > dl > *');
         var tAddress = object.find('.object-header__address').text();
         tAddress = tAddress.replace(/\r/, '');
         tAddress = tAddress.replace(/\n/, '');
@@ -30,35 +26,35 @@ this.$ = this.jQuery = jQuery.noConflict(true);
             var text = element.text();
             var valueElement = $(elements[i + 1]);
             switch (text) {
-                case 'Vraagprijs':
-                    tVraagprijs = valueElement.text();
-                    break;
-                case 'Laatste vraagprijs':
-                    tVraagprijs = valueElement.text();
-                    break;
-                case 'Eigendomssituatie':
-                    tEigendomssituatie = valueElement.text();
-                    break;
-                case 'Woonoppervlakte':
-                    tWoonoppervlakte = valueElement.text();
-                    break;
-                case 'Inhoud':
-                    tInhoud = valueElement.text();
-                    break;
-                    //Overige inpandige ruimte
-                case 'Overige inpandige ruimte':
-                    tOverigeInpandigeRuimte = valueElement.text();
-                    break;
-                    //Gebouwgebonden buitenruimte
-                case 'Gebouwgebonden buitenruimte':
-                    tGebouwgebondenBuitenruimte = valueElement.text();
-                    break;
-                    //Externe bergruimte
-                case 'Externe bergruimte':
-                    tExterneBergruimte = valueElement.text();
-                    break;
-                default:
-                    console.log(text);
+            case 'Vraagprijs':
+                tVraagprijs = valueElement.text();
+                break;
+            case 'Laatste vraagprijs':
+                tVraagprijs = valueElement.text();
+                break;
+            case 'Eigendomssituatie':
+                tEigendomssituatie = valueElement.text();
+                break;
+            case 'Woonoppervlakte':
+                tWoonoppervlakte = valueElement.text();
+                break;
+            case 'Inhoud':
+                tInhoud = valueElement.text();
+                break;
+                // Overige inpandige ruimte
+            case 'Overige inpandige ruimte':
+                tOverigeInpandigeRuimte = valueElement.text();
+                break;
+                // Gebouwgebonden buitenruimte
+            case 'Gebouwgebonden buitenruimte':
+                tGebouwgebondenBuitenruimte = valueElement.text();
+                break;
+                // Externe bergruimte
+            case 'Externe bergruimte':
+                tExterneBergruimte = valueElement.text();
+                break;
+            default:
+                console.log(text);
             }
         }
         infoObject.transmission.price = extractNumber(tVraagprijs);
@@ -67,28 +63,28 @@ this.$ = this.jQuery = jQuery.noConflict(true);
         infoObject.surfacesAndContents.useAreas.buildingRelatedOutdoorSpace = extractNumber(tGebouwgebondenBuitenruimte);
         infoObject.surfacesAndContents.useAreas.externalStorageSpace = extractNumber(tExterneBergruimte);
         infoObject.surfacesAndContents.contents = extractNumber(tInhoud);
-        infoObject.surfacesAndContents.totalUseAreas = infoObject.surfacesAndContents.useAreas.livingArea + infoObject.surfacesAndContents.useAreas.otherIndoorSpace + infoObject.surfacesAndContents.useAreas.buildingRelatedOutdoorSpace + infoObject.surfacesAndContents.useAreas.externalStorageSpace;
+        infoObject.surfacesAndContents.totalUseAreas =
+            infoObject.surfacesAndContents.useAreas.livingArea +
+            infoObject.surfacesAndContents.useAreas.otherIndoorSpace +
+            infoObject.surfacesAndContents.useAreas.buildingRelatedOutdoorSpace +
+            infoObject.surfacesAndContents.useAreas.externalStorageSpace;
         infoObject.address = tAddress;
         infoObject.url = document.location.href;
-        infoObject.ownershipSituation=tEigendomssituatie;
+        infoObject.ownershipSituation = tEigendomssituatie;
         return infoObject;
-
     }
-    function extractNumber(text){
-        if (!text){
-            text='0';
+    function extractNumber(text) {
+        if (!text) {
+            text = '0';
         }
-        return parseFloat(text.replace(/[^0-9]/g, ""));
+        return parseFloat(text.replace(/\D/g, ''));
     }
     function doOverview(object) {
-
-        var tAddress = object.find('h3.search-result-title')
-        .text();
-        var eVraagprijs = object.find('.search-result-price');
-        var eWoonoppervlakte = object.find('[title=Woonoppervlakte]');
-        var tVraagprijs = eVraagprijs.text();
-        var tWoonoppervlakte = eWoonoppervlakte.text();
-
+        var tAddress = object.find('h3.search-result-title').text();
+        var tVraagprijs = object.find('.search-result-price').text();
+        var tWoonoppervlakte = object.find('[title=Woonoppervlakte]').text();
+        infoObject.address = tAddress;
+        infoObject.url = document.location.href;
         infoObject.transmission.price = extractNumber(tVraagprijs);
         infoObject.surfacesAndContents.useAreas.livingArea = extractNumber(tWoonoppervlakte);
 
@@ -97,34 +93,39 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 
     function createOverview(infoObject, element) {
         var pricePerSquareMeters = infoObject.transmission.price / infoObject.surfacesAndContents.useAreas.livingArea;
-        var eExtraInfo = $("<div>");
-        eExtraInfo.append($("<p>")
-                          .text('pricePerSquareMeters: ' + pricePerSquareMeters));
+        var eExtraInfo = $('<div>');
+        eExtraInfo.append($('<p>').text('pricePerSquareMeters: ' + pricePerSquareMeters));
 
         element.find('.search-result-info-price').append(eExtraInfo);
     }
 
     function createDetail(infoObject, element) {
+        /* eslint no-unused-vars: 0 */
         var pricePerSquareMeters = infoObject.transmission.price / infoObject.surfacesAndContents.useAreas.livingArea;
-        var pricePerSquareMetersExtra = infoObject.transmission.price / (infoObject.surfacesAndContents.useAreas.livingArea + infoObject.surfacesAndContents.useAreas.otherIndoorSpace + infoObject.surfacesAndContents.useAreas.buildingRelatedOutdoorSpace + infoObject.surfacesAndContents.useAreas.externalStorageSpace);
+        // Unused vars
+        var pricePerSquareMetersExtra =
+            infoObject.transmission.price /
+            (infoObject.surfacesAndContents.useAreas.livingArea +
+                infoObject.surfacesAndContents.useAreas.otherIndoorSpace +
+                infoObject.surfacesAndContents.useAreas.buildingRelatedOutdoorSpace +
+                infoObject.surfacesAndContents.useAreas.externalStorageSpace);
+
         var pricePerQubicMeters = infoObject.transmission.price / infoObject.surfacesAndContents.contents;
-        var eExtraInfo = $("<table>");
-        var eExtraInfoRowHeader = $("<tr>");
-        var eExtraInfoRowData = $("<tr>");
+        /* eslint no-unused-vars: 1 */
+        var eExtraInfo = $('<table>');
+        var eExtraInfoRowHeader = $('<tr>');
+        var eExtraInfoRowData = $('<tr>');
         var flattenInfoObject = flatten(infoObject);
 
         for (var key in flattenInfoObject) {
-            eExtraInfoRowHeader.append($("<th>").text(key.split(".").pop()));
+            eExtraInfoRowHeader.append($('<th>').text(key.split('.').pop()));
             var value = flattenInfoObject[key];
-            eExtraInfoRowData.append($("<td>").text(value));
+            eExtraInfoRowData.append($('<td>').text(value));
         }
 
         eExtraInfo.append(eExtraInfoRowHeader);
         eExtraInfo.append(eExtraInfoRowData);
-        $('body').prepend(eExtraInfo);
-
-
-
+        element.prepend(eExtraInfo);
     }
     function flatten(input, reference, output) {
         output = output || {};
@@ -148,7 +149,7 @@ this.$ = this.jQuery = jQuery.noConflict(true);
         transmission: {
             price: 0
         },
-        ownershipSituation:'',
+        ownershipSituation: '',
 
         surfacesAndContents: {
             useAreas: {
@@ -162,33 +163,27 @@ this.$ = this.jQuery = jQuery.noConflict(true);
         }
     };
     if (bOverview) {
-        var objects = $(".search-result-content-inner");
+        var objects = $('.search-result-content-inner');
         for (var i = 0; i < objects.length; ++i) {
-            var element = $(objects[i]);
-            infoObject = doOverview(element);
-            createOverview(infoObject, element);
+            var eOverviewItem = $(objects[i]);
+            infoObject = doOverview(eOverviewItem);
+            createOverview(infoObject, eOverviewItem);
         }
-
     }
 
     if (bDetail) {
-        var element = $('.object-detail');
-        infoObject = doDetail(element);
-        createDetail(infoObject, element);
-
+        var eDetail = $('.object-detail');
+        infoObject = doDetail(eDetail);
+        createDetail(infoObject, $('body'));
     }
 
-
-    if (infoObject.ownershipSituation.indexOf('erfpacht') !== -1) {
-        document.body.style.backgroundColor = "red";
+    if (infoObject.ownershipSituation.match(/erfpacht/gi)) {
+        document.body.style.backgroundColor = 'red';
     }
 
-    if (infoObject.ownershipSituation.indexOf('Erfpacht') !== -1) {
-        document.body.style.backgroundColor = "red";
-    }
-
-    //console.table(nVierkanteMeterPrijs2);
+    // Console.table(nVierkanteMeterPrijs2);
     console.table(infoObject);
     console.table(flatten(infoObject));
+}.bind(this)(jQuery));
 
-})();
+jQuery.noConflict();
