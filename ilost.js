@@ -11,13 +11,17 @@
 
 (function($) {
     'use strict';
+
+    var container = $('.l-container');
+    var width = container.css('width');
+
     var side = $('.l-side');
     side.remove();
 
     var content = $('.l-content')[0];
-    content.style.width='100%';
-    content.style.padding='0';
-    content.style.margin='0';
+    content.style.padding=0;
+    content.style.margin=0;
+    content.style.width=width;
     reset();
     var moreButton = $(content).find('.btn.js-load-more');
     moreButton.on('click', function(){
@@ -34,8 +38,8 @@
 
                 if (element.getAttribute('reset')!=='1'){
                     console.log('element', element);
-                    element.style.width='1000px';
-                    element.style.height='1000px';
+                    element.style.width=width;
+                    element.style.height=width;
                     element.style.left='0';
                     element.style.top='0';
                     element.style.padding='0';
@@ -56,8 +60,8 @@
 
                                 image.setAttribute('src', src);
                             }
-                            image.style.width='1000px';
-                            image.style.height='1000px';
+                            image.style.width=width;
+                            image.style.height=width;
                             image.style.minWidth='auto';
                             image.style.minHeight='auto';
                             image.style.position='relative';
