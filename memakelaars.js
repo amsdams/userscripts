@@ -11,21 +11,16 @@
 
 this.$ = this.jQuery = jQuery.noConflict(true);
 $(document).ready(function() {
-
-    $( "<a/>", {
-        class: "hideSold",
-        text: "Hide Sold",
-        click: function() {
-            $('div.tile.tile-aanbod.outline').each(function(){
-                console.log($( this ).children('div.item-status').length);
-                if ($( this ).children('div.item-status').length > 0){
-                    $( this ).toggle( "slow" );
-                }
-            });
-
+  $('<a/>', {
+    class: 'hideSold',
+    text: 'Hide Sold',
+    click: function() {
+      $('div.tile.tile-aanbod.outline').each(function() {
+        console.log($(this).children('div.item-status').length);
+        if ($(this).children('div.item-status').length > 0) {
+          $(this).toggle('slow');
         }
-    }).prependTo( "body" );
-
-
-
+      });
+    },
+  }).prependTo('body');
 });
