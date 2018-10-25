@@ -1,0 +1,25 @@
+[{
+	'reportyear': '2017',
+	'measures': [{
+		'measureid': 11,
+		'measurevalue': 17311
+	}]
+}, {
+	'reportyear': '2016',
+	'measures': [{
+		'measureid': 11,
+		'measurevalue': 16311
+	}]
+}, {
+	'reportyear': '2015',
+	'measures': [{
+		'measureid': 11,
+		'measurevalue': 15311
+	}]
+}, {
+	'reportyear': '2014',
+	'measures': [{
+		'measureid': 11,
+		'measurevalue': 14311
+	}]
+}]
