@@ -10,19 +10,35 @@
 // @require https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js
 // ==/UserScript==
 
-
 var $ = window.jQuery;
-
+var columns = ["Label", "Series", "Format", "Country", "Releases", "Genre", "Style"]
 $(document).ready(function() {
-   var rows = $('.release_list_table tr')
-    $.each(rows, function( index, value ) {
-        var row = $(value);
-        var link = row.find('.collection-image-wrapper a');
-       // if (index==0){
+    var headrow = $('.release_list_table thead tr');
+    $.each(columns, function( ){
+        var column = this;
+        headrow.append("<th class='"+column+"'>"+column+"</th>");
+    });
+    var bodyrows = $('.release_list_table tbody tr');
+
+    $.each(bodyrows, function( body_index, body_value ) {
+        var bodyrow = $(this);
+        $.each(columns, function( ){
+            var column = this;
+            bodyrow.append("<td class='"+column+"'>"+column+"</td>");
+        });
+        var link = bodyrow.find('.collection-image-wrapper a');
         $.get( link.attr('href'), function( data ) {
             var info = $(data).find('tbody')[0];
-            row.append(info);
+            var info_rows = $(info).find('tr');
+
+            $.each(info_rows, function( ) {
+                var info_row = $(this);
+                var info_row_label = info_row.find('th').text().replace('\:', '');
+                var info_row_value = info_row.find('td');
+                bodyrow.find('td.'+info_row_label).empty().append(info_row_value);
+
+
+            })
         });
-      //  }
     });
 });
