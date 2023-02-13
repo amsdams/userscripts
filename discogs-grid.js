@@ -14,7 +14,7 @@ var $ = window.jQuery;
 $(document).ready(function() {
     var repeat = $('#limit_top').val()/5;
 
-    $('h4, h5').remove();
+    $('.card-release-title, .card-artist-name, .card_actions.skittles').remove();
 
     $('.card').css({'margin':'0px',
                     'height':'auto'});
