@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 var $ = window.jQuery;
-var columns = ["Label", "Series", "Format", "Country", "Releases", "Genre", "Style"]
+var columns = ["Label", "Series", "Format", "Country", "Releases", "Genre", "Style", "LastFM"]
 $(document).ready(function() {
     var headrow = $('.release_list_table thead tr');
     $.each(columns, function( ){
@@ -22,10 +22,13 @@ $(document).ready(function() {
 
     $.each(bodyrows, function( body_index, body_value ) {
         var bodyrow = $(this);
+        var title = bodyrow.find('.collection-card-title').text();
+
         $.each(columns, function( ){
             var column = this;
             bodyrow.append("<td class='"+column+"'>"+column+"</td>");
         });
+
         var link = bodyrow.find('.collection-image-wrapper a');
         $.get( link.attr('href'), function( data ) {
             var info = $(data).find('tbody')[0];
@@ -40,5 +43,7 @@ $(document).ready(function() {
 
             })
         });
+        bodyrow.find('td.LastFM').empty().append($('<a>'+title+'</a>').attr('href', 'https://www.last.fm/search/albums?q='+title))
+
     });
 });
